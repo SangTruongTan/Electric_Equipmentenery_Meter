@@ -35,21 +35,23 @@ void setup() {
 void loop() {
   //Check WiFi connection status
   if(WiFi.status()== WL_CONNECTED){
-    // Url
-    String url = serverName + "?DongDien=" + I + "&CongSuat=" + P + "&Power=" + E;
-    Serial.println(url);
     // Your Domain name with URL path or IP address with path
-    if(http.begin(wifiClient, url)) {
-      Serial.println("HTTP GET...");
-      int httpCode = http.GET();
+    if(http.begin(wifiClient, serverName)) {
+      // Specify content-type header
+      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+      // Url
+      String url = "Dongdien=" + I + "&Congsuat=" + P + "&Power=" + E + "";
+      Serial.println(url);
+      Serial.println("HTTP POST...");
+      int httpCode = http.POST(url);
       if(httpCode > 0) {
-        Serial.println("Http code:" + httpCode);
+        Serial.println("HTTP code:" + httpCode);
       } else {
         Serial.println("HTTP GET Failed with code:" + httpCode);
       }
       // Free resources
       http.end();
-    } else{
+    } else {
       Serial.println("Unable to connect via HTTP");
     }
   }
