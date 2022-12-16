@@ -45,9 +45,9 @@ void loop() {
       Serial.println("HTTP POST...");
       int httpCode = http.POST(url);
       if(httpCode > 0) {
-        Serial.println("HTTP code:" + httpCode);
+        Serial.printf("HTTP code:%d", httpCode);
       } else {
-        Serial.println("HTTP GET Failed with code:" + httpCode);
+        Serial.printf("HTTP GET Failed with code:%d", httpCode);
       }
       // Free resources
       http.end();
