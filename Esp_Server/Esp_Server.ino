@@ -2,6 +2,18 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
+// Typedef
+struct data_t {
+	String I;
+	String P;
+	String E;
+};
+
+// Function prototype
+data_t parse(String inp);
+
+
+
 // Replace with your network credentials
 const char* ssid     = "P403_2.4G";
 const char* password = "bontramleba";
@@ -13,9 +25,7 @@ HTTPClient http;
 WiFiClient wifiClient;
 
 // Variable declaration
-String I = "3.3";
-String P = "2.3";
-String E = "5.5";
+data_t Parameter;
 
 void setup() {
   Serial.begin(115200);
@@ -33,10 +43,18 @@ void setup() {
 }
 
 void loop() {
+  //Receive serial data
+  if(Serial.available()) {
+    String Data = Serial.readStringUntil('\n');
+    if(Data != "") {
+      Parameter = parse(Data);
+      Serial.println("Received data");
+    }
+  }
   //Check WiFi connection status
   if(WiFi.status()== WL_CONNECTED){
     // Url
-    String url = serverName + "?Dongdien=" + I + "&Congsuat=" + P + "&Power=" + E + "";
+    String url = serverName + "?Dongdien=" + Parameter.I + "&Congsuat=" + Parameter.P + "&Power=" + Parameter.E + "";
     Serial.println(url);
     // Specify content-type header
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -62,4 +80,31 @@ void loop() {
   }
   //Iteration time
   delay(60000);  
+}
+
+data_t parse(String input) {
+    data_t retval;
+    int i = 0;
+    while(input != "") {
+        int index = input.indexOf(',');
+        String token = input.substring(0, index);
+        switch (i) {
+            case 0:
+                retval.I = token;
+                break;
+            case 1:
+                retval.P = token;
+                break;
+            default:
+                retval.E = token;
+                break;
+        }
+        if(index != -1) {
+            input.remove(0, index + 1);
+        } else {
+            input.remove(0, input.length());
+        }
+        i++;
+    }
+    return retval;
 }
