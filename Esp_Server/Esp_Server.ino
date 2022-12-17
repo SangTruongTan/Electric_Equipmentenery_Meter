@@ -29,7 +29,6 @@ data_t Parameter;
 
 void setup() {
   Serial.begin(115200);
-  
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
   while(WiFi.status() != WL_CONNECTED) { 
@@ -39,7 +38,10 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
-
+  //Initialize values
+  Parameter.I = "0";
+  Parameter.P = "0";
+  Parameter.E = "0";
 }
 
 void loop() {
