@@ -26,6 +26,7 @@ WiFiClient wifiClient;
 
 // Variable declaration
 data_t Parameter;
+int identifier = 1;
 
 void setup() {
   Serial.begin(115200);
@@ -56,7 +57,7 @@ void loop() {
   //Check WiFi connection status
   if(WiFi.status()== WL_CONNECTED){
     // Url
-    String url = serverName + "?Dongdien=" + Parameter.I + "&Congsuat=" + Parameter.P + "&Power=" + Parameter.E + "";
+    String url = serverName + "?Id=" + identifier + "&Dongdien=" + Parameter.I + "&Congsuat=" + Parameter.P + "&Power=" + Parameter.E + "";
     Serial.println(url);
     // Specify content-type header
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -67,6 +68,9 @@ void loop() {
       String payload = http.getString(); 
       if(httpCode > 0) {
         Serial.printf("HTTP code:%d\r\n", httpCode);
+        if(httpCode == 200) {
+          identifier += 1;
+        }
         Serial.println(payload);
       } else {
         Serial.printf("HTTP GET Failed with code:%d\r\n", httpCode);
