@@ -7,12 +7,11 @@ struct data_t {
 	String I;
 	String P;
 	String E;
+  String Bill;
 };
 
 // Function prototype
 data_t parse(String inp);
-
-
 
 // Replace with your network credentials
 const char* ssid     = "P403_2.4G";
@@ -43,6 +42,7 @@ void setup() {
   Parameter.I = "0";
   Parameter.P = "0";
   Parameter.E = "0";
+  Parameter.Bill = "0";
 }
 
 void loop() {
@@ -57,7 +57,8 @@ void loop() {
   //Check WiFi connection status
   if(WiFi.status()== WL_CONNECTED){
     // Url
-    String url = serverName + "?Id=" + identifier + "&Dongdien=" + Parameter.I + "&Congsuat=" + Parameter.P + "&Power=" + Parameter.E + "";
+    String url = serverName + "?Id=" + identifier + "&Dongdien=" + Parameter.I + "&Congsuat=" +
+                 Parameter.P + "&Power=" + Parameter.E + "&Bill=" + Parameter.Bill + "";
     Serial.println(url);
     // Specify content-type header
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -100,10 +101,12 @@ data_t parse(String input) {
                 break;
             case 1:
                 retval.P = token;
-                break;
-            default:
+                break;         
+            case 2:
                 retval.E = token;
                 break;
+            default:
+                retval.Bill = token;
         }
         if(index != -1) {
             input.remove(0, index + 1);
