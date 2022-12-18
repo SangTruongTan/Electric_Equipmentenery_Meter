@@ -2,17 +2,17 @@
 #include <LiquidCrystal_I2C.h>
 
 //Function prototype
-int billing_calculate(float Energy);
+int billing_calculate(double Energy);
 
 EnergyMonitor SCT013;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 int pinSCT = A0;  //cảm biến kết nối với chân A0
-int vol = 230;
-int cong_suat;
+double vol = 230;
+double cong_suat;
 int count;
 double Irms;
 String data;
-float power;
+double power;
 int Billing;
 
 void setup() {
@@ -34,7 +34,7 @@ void loop() {
   Irms = Irms / count;
   count = 0;
   cong_suat = Irms * vol;
-  power += cong_suat/3600000; // 1Kwh = 3600000Ws (J)
+  power += cong_suat/3600000.0; // 1Kwh = 3600000Ws (J)
   //Calculating billing
   Billing = billing_calculate(power);
   String dataSent = String(Irms) + "," + String(cong_suat) + "," + String(power) + "," + String(Billing);
@@ -50,7 +50,7 @@ void loop() {
 }
 
 
-int billing_calculate(float Energy) {
+int billing_calculate(double Energy) {
     int BillingFee = 0;
     const static int numberOfStages = 6;
     const static int stage[] = {0, 50, 100, 200, 300, 400};
