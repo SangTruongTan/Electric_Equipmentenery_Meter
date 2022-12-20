@@ -6,7 +6,7 @@
 
 
 //Function prototype
-int32_t billing_calculate(double Input);
+int32_t billing_calculate(double Energy);
 
 //Software Serial
 const byte rxPin = 2;
@@ -81,9 +81,8 @@ void loop() {
 }
 
 
-int32_t billing_calculate(double Input) {
+int32_t billing_calculate(double Energy) {
     int32_t BillingFee = 0;
-    int32_t Energy = int32_t(Input);
     const static int numberOfStages = 6;
     const static int32_t stage[] = {0, 50, 100, 200, 300, 400};
     const static int32_t bill[] = {1678, 1734, 2014, 2536, 2834, 2927};
